@@ -2,7 +2,7 @@
 FROM openjdk:17-jdk-slim as build
 
 #Information around who maintains the image
-MAINTAINER padillatomas.com
+MAINTAINER padillatom.com
 
 # Add the application's jar to the container
 COPY target/accounts-0.0.1-SNAPSHOT.jar accounts-0.0.1-SNAPSHOT.jar

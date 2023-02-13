@@ -3,28 +3,28 @@ version: "3.8"
 services:
 
   accounts:
-    image: padillatomas/accounts:latest
+    image: padillatom/accounts:latest
     mem_limit: 700m
     ports:
       - "8080:8080"
     networks:
-      - padillatomas-network
+      - padillatom-network
     
   loans:
-    image: padillatomas/loans:latest
+    image: padillatom/loans:latest
     mem_limit: 700m
     ports:
       - "8090:8090"
     networks:
-      - eazybank-network
+      - padillatom-network
     
   cards:
-    image: padillatomas/cards:latest
+    image: padillatom/cards:latest
     mem_limit: 700m
     ports:
       - "9000:9000"
     networks:
-      - padillatomas-network
+      - padillatom-network
     
 networks:
-  padillatomas-network:
+  padillatom-network:
