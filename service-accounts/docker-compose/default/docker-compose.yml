@@ -9,12 +9,12 @@ services:
       - "8071:8071"
     networks:
      - padillatom
-      
-  accounts:
-    image: padillatom/accounts:latest
+
+  eurekaserver:
+    image: padillatom/eurekaserver:latest
     mem_limit: 700m
     ports:
-      - "8080:8080"
+      - "8070:8070"
     networks:
       - padillatom
     depends_on:
@@ -28,6 +28,27 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+
+  accounts:
+    image: padillatom/accounts:latest
+    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - padillatom
+    depends_on:
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 180s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_CLIENT_SERVICE_DEFAULTZONE: http://eurekaserver:8070/eureka/
   
   loans:
     image: padillatom/loans:latest
@@ -38,6 +59,7 @@ services:
       - padillatom
     depends_on:
       - configserver
+      - eurekaserver
     deploy:
       restart_policy:
         condition: on-failure
@@ -47,6 +69,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_CLIENT_SERVICE_DEFAULTZONE: http://eurekaserver:8070/eureka/
     
   cards:
     image: padillatom/cards:latest
@@ -57,6 +80,7 @@ services:
       - padillatom
     depends_on:
       - configserver
+      - eurekaserver
     deploy:
       restart_policy:
         condition: on-failure
@@ -66,6 +90,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_CLIENT_SERVICE_DEFAULTZONE: http://eurekaserver:8070/eureka/
       
 networks:
   padillatom:
